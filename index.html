@@ -64,10 +64,10 @@
             box-shadow: 0 0 15px #ef4444;
         }
         #profile-img {
-            transition: filter 1s ease, opacity 1s ease;
+            transition: filter 0.8s ease, opacity 0.8s ease;
         }
         .img-dormido {
-            filter: grayscale(100%) brightness(0.6);
+            filter: grayscale(100%) brightness(0.4);
         }
     </style>
 </head>
@@ -98,7 +98,7 @@
             <div class="w-full space-y-6">
                 <div class="flex justify-between items-center px-2">
                     <span class="text-gray-500 text-xs font-medium uppercase tracking-widest">Estado</span>
-                    <span id="status-label" class="text-green-500 text-sm font-bold tracking-tight">SISTEMA ACTIVO</span>
+                    <span id="status-label" class="text-green-500 text-sm font-bold tracking-tight uppercase">SISTEMA ACTIVO</span>
                 </div>
                 
                 <div class="bg-white/5 rounded-2xl p-6 border border-white/5">
@@ -133,7 +133,7 @@
             video.src = videoSrc;
         }
 
-        // Real-time Sync
+        // Real-time Sync (Reactive Polling)
         async function updateStatus() {
             try {
                 const res = await fetch('https://gist.githubusercontent.com/dshakers/84003308e9885e1e42b5e417685ad185/raw/status.json?t=' + Date.now());
@@ -145,22 +145,23 @@
                 
                 const led = document.getElementById('status-led');
                 const img = document.getElementById('profile-img');
+                const label = document.getElementById('status-label');
                 
                 if (data.online) {
                     led.className = 'led led-active';
                     img.classList.remove('img-dormido');
-                    document.getElementById('status-label').className = 'text-green-500 text-sm font-bold tracking-tight';
+                    label.className = 'text-green-500 text-sm font-bold tracking-tight uppercase';
                 } else {
                     led.className = 'led led-offline';
                     img.classList.add('img-dormido');
-                    document.getElementById('status-label').className = 'text-red-500 text-sm font-bold tracking-tight';
+                    label.className = 'text-red-500 text-sm font-bold tracking-tight uppercase';
                 }
             } catch (e) {
                 console.log('Sync error');
             }
         }
 
-        // Initial Animation
+        // Initial Animation & Real-time Interval
         window.onload = () => {
             const card = document.getElementById('main-card');
             card.style.transition = "all 1.2s cubic-bezier(0.16, 1, 0.3, 1)";
@@ -170,7 +171,9 @@
                 card.style.transform = "translateY(0)";
                 updateStatus();
             }, 100);
-            setInterval(updateStatus, 15000);
+            
+            // Critical: Polling set to 3 seconds for real-time feel
+            setInterval(updateStatus, 3000);
         };
     </script>
 </body>
