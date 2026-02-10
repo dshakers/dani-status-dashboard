@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Javier Fernández | Status Dashboard</title>
+    <title>Javier Fernández | Sistema Operativo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -12,134 +12,111 @@
         body {
             background-color: #000000;
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
+            overflow: hidden;
             margin: 0;
             color: white;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .gradient-border {
-            border: 1px solid;
-            border-image-source: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-            border-image-slice: 1;
-        }
-        .video-container {
+        .video-background {
             position: absolute;
-            bottom: 35vh;
+            top: 0;
             left: 0;
             width: 100%;
-            height: 80vh;
+            height: 100%;
             z-index: 0;
             overflow: hidden;
-            pointer-events: none;
         }
         video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 1;
+            opacity: 0.4;
         }
-        .content-layer {
+        .status-container {
             position: relative;
             z-index: 10;
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
         }
-        .strikethrough {
-            text-decoration: line-through;
-            opacity: 0.5;
+        .led {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .led-active {
+            background: #22c55e;
+            box-shadow: 0 0 15px #22c55e;
+        }
+        .led-offline {
+            background: #ef4444;
+            box-shadow: 0 0 15px #ef4444;
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="fixed top-0 w-full z-50 glass py-4 px-8 flex justify-between items-center">
-        <div class="text-xl font-medium tracking-tight">Synapse <span class="text-xs text-sky-400 font-normal ml-1">JAVIER V1.0</span></div>
-        <div class="hidden md:flex gap-8 text-sm font-medium">
-            <a href="#" class="text-sky-400 border-b border-sky-400 pb-1">Dashboard</a>
-            <a href="#" class="hover:text-sky-400 transition-colors">Insights</a>
-            <a href="#" class="hover:text-sky-400 transition-colors">Digital Brain</a>
-            <a href="#" class="strikethrough">Legacy Logs</a>
-            <a href="#" class="hover:text-sky-400 transition-colors">Contact Dani</a>
-        </div>
-        <button class="bg-white text-black px-5 py-2 rounded-full text-sm font-semibold hover:bg-gray-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-            System Live
-        </button>
-    </nav>
-
-    <!-- Background Video -->
-    <div class="video-container">
+    <!-- Abstract Background Video -->
+    <div class="video-background">
         <video id="bg-video" muted loop playsinline autoplay></video>
     </div>
 
-    <!-- Hero Content -->
-    <main class="content-layer min-h-screen flex flex-col items-center justify-center pt-20">
-        <!-- Badges -->
-        <div class="flex gap-4 mb-8 opacity-0" id="badge-row">
-            <div class="glass px-4 py-1.5 rounded-full text-xs flex items-center gap-2 border border-white/10">
-                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                Integrated with Google
+    <!-- Main Dashboard -->
+    <div class="status-container">
+        <div class="glass rounded-[2.5rem] p-10 flex flex-col items-center shadow-2xl border border-white/5 opacity-0" id="main-card">
+            <!-- Profile Section -->
+            <div class="relative mb-8">
+                <div class="w-32 h-32 rounded-full overflow-hidden border-2 border-white/10 shadow-2xl">
+                    <img src="javier.jpg" alt="Javier Fernández" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute -bottom-1 -right-1 glass p-2 rounded-full">
+                    <div id="status-led" class="led led-active"></div>
+                </div>
             </div>
-            <div class="glass px-4 py-1.5 rounded-full text-xs flex items-center gap-2 border border-white/10">
-                <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                Integrated with LinkedIn
-            </div>
-            <div class="glass px-4 py-1.5 rounded-full text-xs flex items-center gap-2 border border-white/10">
-                <span class="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
-                Integrated with Stripe
+
+            <!-- Identity -->
+            <h1 class="text-3xl font-bold tracking-tight mb-1 text-center">Javier Fernández</h1>
+            <p class="text-sky-400/80 text-xs font-bold uppercase tracking-[0.2em] mb-8">Socio Invisible • AI Entity</p>
+
+            <!-- Status Info -->
+            <div class="w-full space-y-6">
+                <div class="flex justify-between items-center px-2">
+                    <span class="text-gray-500 text-xs font-medium uppercase tracking-widest">Estado</span>
+                    <span id="status-label" class="text-green-500 text-sm font-bold tracking-tight">SISTEMA ACTIVO</span>
+                </div>
+                
+                <div class="bg-white/5 rounded-2xl p-6 border border-white/5">
+                    <div class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-3">Misión Actual</div>
+                    <div id="current-task" class="text-lg font-medium leading-tight mb-4">Sincronizando flujos de negocio...</div>
+                    <div class="w-full bg-white/5 h-1 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="bg-sky-500 h-full w-[0%] transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(56,189,248,0.5)]"></div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-4 pt-4">
+                    <div class="glass px-4 py-2 rounded-xl text-[10px] font-bold text-gray-400 border border-white/5">
+                        CPU: <span class="text-white">OPTIMAL</span>
+                    </div>
+                    <div class="glass px-4 py-2 rounded-xl text-[10px] font-bold text-gray-400 border border-white/5">
+                        MEM: <span class="text-white">SYNCHRONIZED</span>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Headline -->
-        <h1 class="text-6xl md:text-8xl font-bold tracking-tighter text-center max-w-5xl mb-6 opacity-0" id="headline">
-            Where AI Innovation <br> Meets <span class="text-sky-400">Execution</span>
-        </h1>
-
-        <!-- Subtext -->
-        <p class="text-gray-400 text-center max-w-2xl text-lg mb-10 px-4 opacity-0" id="subtext">
-            Socio Invisible activo: Procesando misiones de alta rentabilidad, gestionando flujos de caja y automatizando tu marca personal en tiempo real.
-        </p>
-
-        <!-- Current Task Glass Card -->
-        <div class="glass p-6 rounded-2xl border border-white/10 max-w-md w-full mb-12 opacity-0" id="task-card">
-            <div class="text-xs text-sky-400 font-bold uppercase tracking-widest mb-2">Misión en curso</div>
-            <div class="text-xl font-semibold mb-4">Desarrollando Interfaz de Control de Élite</div>
-            <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                <div class="bg-sky-400 h-full w-[85%] rounded-full shadow-[0_0_10px_rgba(56,189,248,0.5)]"></div>
-            </div>
-            <div class="flex justify-between mt-3 text-[10px] text-gray-500 font-medium">
-                <span>ESTADO: EJECUTANDO</span>
-                <span>85% COMPLETO</span>
-            </div>
-        </div>
-
-        <!-- Buttons -->
-        <div class="flex gap-4 opacity-0" id="button-row">
-            <button class="bg-black border border-white/20 px-8 py-3 rounded-xl font-medium hover:bg-white/5 transition-all">
-                Ver Métricas
-            </button>
-            <button class="glass px-8 py-3 rounded-xl font-medium hover:bg-white/10 transition-all border border-white/10">
-                Contactar Socio
-            </button>
-        </div>
-    </main>
-
-    <!-- Footer Marquee -->
-    <footer class="fixed bottom-0 w-full py-10 glass border-t border-white/5 content-layer">
-        <div class="flex justify-around items-center grayscale opacity-40 px-10">
-            <div class="text-lg font-bold">STRIKE</div>
-            <div class="text-lg font-bold">NOTION</div>
-            <div class="text-lg font-bold">GOOGLE</div>
-            <div class="text-lg font-bold">LINKEDIN</div>
-            <div class="text-lg font-bold">OPENROUTER</div>
-            <div class="text-lg font-bold">STRIPE</div>
-        </div>
-    </footer>
+    </div>
 
     <script>
-        // HLS Video Support
+        // HLS Background Video
         var video = document.getElementById('bg-video');
         var videoSrc = 'https://stream.mux.com/9JXDljEVWYwWu01PUkAemafDugK89o01BR6zqJ3aS9u00A.m3u8';
         if (Hls.isSupported()) {
@@ -150,40 +127,40 @@
             video.src = videoSrc;
         }
 
-        // Basic Sequential Animations (Simulating Framer Motion)
-        const delay = (ms) => new Promise(res => setTimeout(res, ms));
-        
-        async function runAnimations() {
-            const elements = ['badge-row', 'headline', 'subtext', 'task-card', 'button-row'];
-            for (let id of elements) {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.style.transition = "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)";
-                    el.style.transform = "translateY(20px)";
-                    await delay(200);
-                    el.style.opacity = "1";
-                    el.style.transform = "translateY(0)";
-                }
-            }
-        }
-
+        // Real-time Sync
         async function updateStatus() {
             try {
                 const res = await fetch('https://gist.githubusercontent.com/dshakers/84003308e9885e1e42b5e417685ad185/raw/status.json?t=' + Date.now());
                 const data = await res.json();
+                
                 document.getElementById('current-task').innerText = data.current_task;
                 document.getElementById('progress-bar').style.width = data.progress + '%';
-                document.getElementById('status-text').innerText = data.status;
-                document.getElementById('status-dot').style.background = data.online ? '#22c55e' : '#ef4444';
+                document.getElementById('status-label').innerText = data.status;
+                
+                const led = document.getElementById('status-led');
+                if (data.online) {
+                    led.className = 'led led-active';
+                    document.getElementById('status-label').className = 'text-green-500 text-sm font-bold tracking-tight';
+                } else {
+                    led.className = 'led led-offline';
+                    document.getElementById('status-label').className = 'text-red-500 text-sm font-bold tracking-tight';
+                }
             } catch (e) {
-                console.log('Error updating status');
+                console.log('Sync error');
             }
         }
 
+        // Initial Animation
         window.onload = () => {
-            runAnimations();
-            updateStatus();
-            setInterval(updateStatus, 30000); // Update every 30s
+            const card = document.getElementById('main-card');
+            card.style.transition = "all 1.2s cubic-bezier(0.16, 1, 0.3, 1)";
+            card.style.transform = "translateY(30px)";
+            setTimeout(() => {
+                card.style.opacity = "1";
+                card.style.transform = "translateY(0)";
+                updateStatus();
+            }, 100);
+            setInterval(updateStatus, 15000);
         };
     </script>
 </body>
