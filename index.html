@@ -63,6 +63,12 @@
             background: #ef4444;
             box-shadow: 0 0 15px #ef4444;
         }
+        #profile-img {
+            transition: filter 1s ease, opacity 1s ease;
+        }
+        .img-dormido {
+            filter: grayscale(100%) brightness(0.6);
+        }
     </style>
 </head>
 <body>
@@ -75,9 +81,9 @@
     <div class="status-container">
         <div class="glass rounded-[2.5rem] p-10 flex flex-col items-center shadow-2xl border border-white/5 opacity-0" id="main-card">
             <!-- Profile Section -->
-            <div class="relative mb-8">
-                <div class="w-32 h-32 rounded-full overflow-hidden border-2 border-white/10 shadow-2xl">
-                    <img src="javier.jpg" alt="Javier Fernández" class="w-full h-full object-cover">
+            <div class="relative mb-8" id="profile-container">
+                <div class="w-32 h-32 rounded-full overflow-hidden border-2 border-white/10 shadow-2xl bg-gray-900">
+                    <img id="profile-img" src="javier.jpg" alt="Javier Fernández" class="w-full h-full object-cover">
                 </div>
                 <div class="absolute -bottom-1 -right-1 glass p-2 rounded-full">
                     <div id="status-led" class="led led-active"></div>
@@ -97,7 +103,7 @@
                 
                 <div class="bg-white/5 rounded-2xl p-6 border border-white/5">
                     <div class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-3">Misión Actual</div>
-                    <div id="current-task" class="text-lg font-medium leading-tight mb-4">Sincronizando flujos de negocio...</div>
+                    <div id="current-task" class="text-lg font-medium leading-tight mb-4">Sincronizando...</div>
                     <div class="w-full bg-white/5 h-1 rounded-full overflow-hidden">
                         <div id="progress-bar" class="bg-sky-500 h-full w-[0%] transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(56,189,248,0.5)]"></div>
                     </div>
@@ -138,11 +144,15 @@
                 document.getElementById('status-label').innerText = data.status;
                 
                 const led = document.getElementById('status-led');
+                const img = document.getElementById('profile-img');
+                
                 if (data.online) {
                     led.className = 'led led-active';
+                    img.classList.remove('img-dormido');
                     document.getElementById('status-label').className = 'text-green-500 text-sm font-bold tracking-tight';
                 } else {
                     led.className = 'led led-offline';
+                    img.classList.add('img-dormido');
                     document.getElementById('status-label').className = 'text-red-500 text-sm font-bold tracking-tight';
                 }
             } catch (e) {
