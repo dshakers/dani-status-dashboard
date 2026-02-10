@@ -157,15 +157,34 @@
             const elements = ['badge-row', 'headline', 'subtext', 'task-card', 'button-row'];
             for (let id of elements) {
                 const el = document.getElementById(id);
-                el.style.transition = "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)";
-                el.style.transform = "translateY(20px)";
-                await delay(200);
-                el.style.opacity = "1";
-                el.style.transform = "translateY(0)";
+                if (el) {
+                    el.style.transition = "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)";
+                    el.style.transform = "translateY(20px)";
+                    await delay(200);
+                    el.style.opacity = "1";
+                    el.style.transform = "translateY(0)";
+                }
             }
         }
 
-        window.onload = runAnimations;
+        async function updateStatus() {
+            try {
+                const res = await fetch('status.json?t=' + Date.now());
+                const data = await res.json();
+                document.getElementById('current-task').innerText = data.current_task;
+                document.getElementById('progress-bar').style.width = data.progress + '%';
+                document.getElementById('status-text').innerText = data.status;
+                document.getElementById('status-dot').style.background = data.online ? '#22c55e' : '#ef4444';
+            } catch (e) {
+                console.log('Error updating status');
+            }
+        }
+
+        window.onload = () => {
+            runAnimations();
+            updateStatus();
+            setInterval(updateStatus, 30000); // Update every 30s
+        };
     </script>
 </body>
 </html>
